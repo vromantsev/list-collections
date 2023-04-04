@@ -1,11 +1,5 @@
 package ua.hillel;
 
-import org.w3c.dom.Node;
-
-import java.util.NoSuchElementException;
-
-
-
 import java.util.NoSuchElementException;
 
 public class LinkedList<T> implements List<T> {
@@ -125,6 +119,7 @@ public class LinkedList<T> implements List<T> {
         }
         return node;
     }
+
     private Node<T> getNode(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
