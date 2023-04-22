@@ -16,7 +16,7 @@ public interface List<T> {
 
     void set(int index, T element);
 
-    boolean remove(int index);
+    T remove(int index);
 
     boolean contains(T element);
 
