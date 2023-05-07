@@ -1,5 +1,6 @@
 package ua.hillel;
 
+import javax.print.attribute.standard.Finishings;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -8,17 +9,18 @@ import java.util.Objects;
  * is based on an array and is a simplified version of {@link java.util.ArrayList}.
  */
 public class ArrayList<T> implements List<T> {
-
-    transient Object[] elementData;
-
     private static final int DEFAULT_CAPACITY = 5;
-    public static Object[] emptyArray = {};
+    private Object[] elementData;
+    private static Object[] emptyArray = {};
+    private int size;
 
     public ArrayList() {
-        this.elementData = emptyArray;
+        this.elementData = new Object[DEFAULT_CAPACITY];
     }
 
-    private int size;
+    public Object[] getElementData() {
+        return elementData;
+    }
 
     @Override
     public void add(T element) {
@@ -28,10 +30,17 @@ public class ArrayList<T> implements List<T> {
             elementData = new Object[DEFAULT_CAPACITY];
         }
         if (size == elementData.length) {
-            elementData = Arrays.copyOf(elementData, size + 1);
+            resize();
         }
+
         elementData[indexElement] = element;
         size = size + 1;
+    }
+
+    private Object[] resize() {
+        int sizeList = size;
+        int newLength = sizeList + ((sizeList + 1) >> 1);
+        return elementData = Arrays.copyOf(elementData, newLength);
     }
 
     @Override
@@ -41,7 +50,7 @@ public class ArrayList<T> implements List<T> {
         }
         Objects.requireNonNull(element);
         if (size == elementData.length) {
-            elementData = Arrays.copyOf(elementData, size + 1);
+            resize();
         }
         System.arraycopy(this.elementData, index, this.elementData, index + 1, size - index);
         this.elementData[index] = element;
@@ -53,9 +62,6 @@ public class ArrayList<T> implements List<T> {
         if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException("The requested index is not in the range of the array");
         }
-        if (elementData[index] == (null)) {
-            throw new NullPointerException();
-        }
         return (T) elementData[index];
     }
 
@@ -66,30 +72,22 @@ public class ArrayList<T> implements List<T> {
                 return element;
             }
         }
-        throw new IllegalArgumentException("Such element was not found in the list");
+        return null;
     }
 
     @Override
     public T getFirst() {
-        if (elementData[0] == null) {
-            throw new NullPointerException("The first index of the list is null.");
-        }
         return get(0);
     }
 
     @Override
     public T getLast() {
-        if (elementData[size - 1] == null) {
-            throw new NullPointerException("The last index of the list is null.");
-        }
         return get(size - 1);
     }
 
     @Override
     public void set(int index, T element) {
-        if (elementData[index] == null) {
-            throw new NullPointerException("The requested index is null");
-        }
+        Objects.checkIndex(index, size);
         elementData[index] = element;
     }
 
